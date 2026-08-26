@@ -22,8 +22,8 @@ const emit = defineEmits(['select-card', 'click-detail'])
     <p>현재 기온: {{ cityItem.temp }}°C</p>
     <p v-if="cityItem.humidity != null">습도 {{ cityItem.humidity }}% · 미세먼지 {{ cityItem.fineDust }} · 바람 {{ cityItem.wind }}m/s</p>
 
-    <span v-if="cityItem.temp >= 25" class="badge hot">🔥 더움</span>
-    <span v-else class="badge cool">❄️ 선선함</span>
+    <span v-if="cityItem.temp >= 25" class="badge hot">🔥 더움(25도 이상)</span>
+    <span v-else class="badge cool">❄️ 선선함(25도 미만)</span>
 
     <span v-if="game" class="badge" :class="game.gameStatus === '우취' ? 'rainout' : 'scheduled'">⚾ {{ game.awayTeam }} vs {{ game.homeTeam }} · {{ game.gameStatus }}</span>
 
