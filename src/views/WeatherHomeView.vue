@@ -64,7 +64,7 @@ const handleDetailJump = (id) => {
       <SearchBar :current-query="searchQuery" @update-query="(val) => (searchQuery = val)" />
     </BaseDashboardCard>
 
-    <BaseDashboardCard class="weather-card">
+    <BaseDashboardCard class="weather-section-card">
       <div class="section-header">
         <h3>지역별 날씨 현황</h3>
         <span class="avg-temp">평균 {{ displayAverageTemp }}{{ configStore.unitSymbol }}</span>
@@ -84,11 +84,17 @@ const handleDetailJump = (id) => {
   width: 100%;
   padding: 20px;
 }
-.weather-card { margin: 16px 0; padding: 20px; background: #fff; border: 1px solid #e7e9ee; border-radius: 8px; }
+.weather-section-card { margin: 16px 0; padding: 20px; background: #fff; border: 1px solid #e7e9ee; border-radius: 8px; }
 .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
 .section-header h3 { margin: 0; font-size: 16px; }
 .avg-temp { color: #3b6ef6; font-size: 13px; font-weight: 600; }
-.weather-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.weather-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 900px) {
+  .weather-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .weather-grid { grid-template-columns: 1fr; }
+}
 .empty-msg { margin: 12px 0 0; color: #c53d33; text-align: center; }
 .status-bar {
   background: #e8f5e9;
