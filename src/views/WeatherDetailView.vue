@@ -1,12 +1,13 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { weatherList } from '../data/weatherData'
 import { useConfigStore } from '@/stores/configStore'
+import { useWeatherStore } from '@/stores/weatherStore'
 
 const route = useRoute()
 const router = useRouter()
 const configStore = useConfigStore()
+const weatherStore = useWeatherStore()
 
 const weatherDetails = {
   맑음: '맑고',
@@ -19,7 +20,11 @@ const weatherDetails = {
 const cityData = ref(null)
 
 onMounted(() => {
-  cityData.value = weatherList.find((item) => item.id === route.params.cityId) ?? null
+  cityData.value = weatherStore.weatherList.find((item) => item.id === route.params.cityId) ?? null
+  if (!cityData.value) return
+  weatherStore.fetchWeather().then(() => {
+    cityData.value = weatherStore.weatherList.find((item) => item.id === route.params.cityId) ?? null
+  })
 })
 
 const displayTemp = computed(() => {
@@ -39,7 +44,7 @@ const getTemperatureDetail = (temp) => (temp >= 25 ? '더운' : temp >= 20 ? '�
     <p class="eyebrow">지역별 상세 기상관측</p>
 
     <div v-if="cityData" class="info-card">
-      <h1>{{ cityData.name }} {{ cityData.stadium }}</h1>
+      <h1>{{ cityData.name }}{{ cityData.stadium }}</h1>
       <p class="summary">{{ weatherDetails[cityData.status] }} {{ getTemperatureDetail(cityData.temp) }} 날입니다.</p>
       <dl>
         <div><dt>주소</dt><dd>{{ cityData.address }}</dd></div>

@@ -1,19 +1,23 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import BaseDashboardCard from '../components/exercise/BaseDashboardCard.vue'
 import SearchBar from '../components/exercise/SearchBar.vue'
 import WeatherCard from '../components/exercise/WeatherCard.vue'
-import { baseballGames, weatherList } from '../data/weatherData'
+import { baseballGames } from '../data/baseballData'
 import { useConfigStore } from '@/stores/configStore'
+import { useWeatherStore } from '@/stores/weatherStore'
 
 const router = useRouter()
 const configStore = useConfigStore()
+const weatherStore = useWeatherStore()
 
 const searchQuery = ref('')
 const defaultCityInfo = '카드를 클릭하거나 검색해 보세요.'
 const selectedCityInfo = ref(defaultCityInfo)
+
+onMounted(() => weatherStore.fetchWeather())
 
 const resetSelectedCity = () => {
   selectedCityInfo.value = defaultCityInfo
@@ -21,15 +25,15 @@ const resetSelectedCity = () => {
 
 const filteredWeatherList = computed(() => {
   const query = searchQuery.value.trim().toLowerCase()
-  if (!query) return weatherList
-  return weatherList.filter((item) =>
+  if (!query) return weatherStore.weatherList
+  return weatherStore.weatherList.filter((item) =>
     [item.name, item.address, item.stadium].some((field) => field?.toLowerCase().includes(query)),
   )
 })
 
 const todayBaseballGames = computed(() =>
   baseballGames.map((game) => {
-    const weather = weatherList.find((item) => item.name === game.city)
+    const weather = weatherStore.weatherList.find((item) => item.name === game.city)
     return { ...game, stadium: weather?.stadium, gameStatus: weather?.status === '비' ? '우취' : '경기' }
   }),
 )
@@ -37,8 +41,8 @@ const todayBaseballGames = computed(() =>
 const gameByCity = computed(() => Object.fromEntries(todayBaseballGames.value.map((game) => [game.city, game])))
 
 const averageTemp = computed(() => {
-  const total = weatherList.reduce((sum, item) => sum + item.temp, 0)
-  return Math.round((total / weatherList.length) * 10) / 10
+  const total = weatherStore.weatherList.reduce((sum, item) => sum + item.temp, 0)
+  return Math.round((total / weatherStore.weatherList.length) * 10) / 10
 })
 
 const displayAverageTemp = computed(() => {

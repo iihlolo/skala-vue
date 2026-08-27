@@ -1,10 +1,15 @@
 <script setup>
-import { computed } from 'vue'
-import { baseballGames, weatherList } from '../data/weatherData'
+import { computed, onMounted } from 'vue'
+import { baseballGames } from '../data/baseballData'
+import { useWeatherStore } from '@/stores/weatherStore'
+
+const weatherStore = useWeatherStore()
+
+onMounted(() => weatherStore.fetchWeather())
 
 const games = computed(() =>
   baseballGames.map((game) => {
-    const weather = weatherList.find((item) => item.name === game.city)
+    const weather = weatherStore.weatherList.find((item) => item.name === game.city)
     return { ...game, stadium: weather?.stadium, gameStatus: weather?.status === '비' ? '우취' : '경기' }
   }),
 )
