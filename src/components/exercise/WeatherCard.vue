@@ -1,6 +1,9 @@
 <script setup>
+import { computed } from 'vue'
+import { useConfigStore } from '@/stores/configStore'
+
 // 1. 상위로부터 단방향 주입받을 객체 데이터 규격 검수 (매크로)
-defineProps({
+const props = defineProps({
   cityItem: {
     type: Object,
     required: true,
@@ -14,6 +17,16 @@ defineProps({
 
 // 2. 상위로 송신할 두 가지 경로의 커스텀 이벤트 식별자 등록 (매크로)
 const emit = defineEmits(['select-card', 'click-detail'])
+
+const configStore = useConfigStore()
+
+const displayTemp = computed(() => {
+  const rawTemp = props.cityItem.temp // 기본 원본 데이터는 섭씨 숫자
+  if (configStore.unit === 'fahrenheit') {
+    return Math.round((rawTemp * 9) / 5 + 32) // 화씨 변환 연산
+  }
+  return rawTemp // 'celsius'일 때는 원본 그대로 반환
+})
 
 const weatherIcons = {
   맑음: '☀️',
@@ -38,7 +51,7 @@ const weatherIcons = {
         </span>
         <!-- <span class="status-label">{{ cityItem.status }}</span> -->
       </div>
-      <span class="temp">{{ cityItem.temp }}°C</span>
+      <span class="temp">{{ displayTemp }}{{ configStore.unitSymbol }}</span>
       <button class="btn-detail" @click.stop="emit('click-detail', cityItem.address, cityItem.status, cityItem.temp)">
         상세보기
       </button>

@@ -47,3 +47,9 @@ const games = computed(() =>
 .matchup strong { display: flex; align-items: center; gap: 5px; color: #1c1f26; white-space: nowrap; }
 .matchup img { width: 26px; height: 26px; object-fit: contain; }
 </style>
+
+<style>
+.app-shell.dark-mode .page-heading h1 {
+  color: #f6f7f9;
+}
+</style>

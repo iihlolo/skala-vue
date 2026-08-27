@@ -1,10 +1,12 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { weatherList } from '../data/weatherData'
+import { useConfigStore } from '@/stores/configStore'
 
 const route = useRoute()
 const router = useRouter()
+const configStore = useConfigStore()
 
 const weatherDetails = {
   맑음: '맑고',
@@ -20,6 +22,15 @@ onMounted(() => {
   cityData.value = weatherList.find((item) => item.id === route.params.cityId) ?? null
 })
 
+const displayTemp = computed(() => {
+  const rawTemp = cityData.value?.temp // 기본 원본 데이터는 섭씨 숫자
+  if (rawTemp == null) return rawTemp
+  if (configStore.unit === 'fahrenheit') {
+    return Math.round((rawTemp * 9) / 5 + 32) // 화씨 변환 연산
+  }
+  return rawTemp // 'celsius'일 때는 원본 그대로 반환
+})
+
 const getTemperatureDetail = (temp) => (temp >= 25 ? '더운' : temp >= 20 ? '따뜻한' : temp < 10 ? '추운' : '선선한')
 </script>
 
@@ -32,7 +43,7 @@ const getTemperatureDetail = (temp) => (temp >= 25 ? '더운' : temp >= 20 ? '�
       <p class="summary">{{ weatherDetails[cityData.status] }} {{ getTemperatureDetail(cityData.temp) }} 날입니다.</p>
       <dl>
         <div><dt>주소</dt><dd>{{ cityData.address }}</dd></div>
-        <div><dt>기온</dt><dd>{{ cityData.temp }}°C</dd></div>
+        <div><dt>기온</dt><dd>{{ displayTemp }}{{ configStore.unitSymbol }}</dd></div>
         <div><dt>날씨</dt><dd>{{ cityData.status }}</dd></div>
         <div><dt>습도</dt><dd>{{ cityData.humidity }}%</dd></div>
         <div><dt>풍속</dt><dd>{{ cityData.wind }}m/s</dd></div>

@@ -1,12 +1,23 @@
+<script setup>
+import UnitToggler from '@/components/exercise/UnitToggler.vue'
+import { useThemeStore } from '@/stores/themeStore'
+
+const themeStore = useThemeStore()
+</script>
+
 <template>
-  <div class="app-shell">
+  <div class="app-shell" :class="{ 'dark-mode': themeStore.isDarkMode }">
     <header class="app-header">
       <RouterLink class="brand" to="/">BASEBALL WEATHER</RouterLink>
-      <nav aria-label="주요 메뉴">
-        <RouterLink to="/">날씨</RouterLink>
-        <RouterLink to="/games">경기 일정</RouterLink>
-        <RouterLink to="/about">서비스 소개</RouterLink>
-      </nav>
+      <div class="header-controls">
+        <nav aria-label="주요 메뉴">
+          <RouterLink to="/">날씨</RouterLink>
+          <RouterLink to="/games">경기 일정</RouterLink>
+          <RouterLink to="/about">서비스 소개</RouterLink>
+        </nav>
+        <UnitToggler />
+        <button class="dark-toggle-btn" @click="themeStore.toggleDarkMode">{{ themeStore.darkModeLabel }}</button>
+      </div>
     </header>
     <main class="app-main">
       <RouterView />
@@ -18,6 +29,39 @@
 .app-shell {
   min-height: 100vh;
   background: #f6f7f9;
+}
+
+.app-shell.dark-mode {
+  background: #1c1f26;
+}
+
+.app-shell.dark-mode .app-header {
+  background: #262a33;
+  border-bottom-color: #3a3f4b;
+}
+
+.app-shell.dark-mode .app-header a {
+  color: #d1d5db;
+}
+
+.app-shell.dark-mode .header-controls span {
+  color: #d1d5db;
+}
+
+.dark-toggle-btn {
+  padding: 6px 10px;
+  background-color: #1c1f26;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .app-header {

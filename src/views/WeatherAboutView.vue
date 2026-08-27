@@ -73,3 +73,9 @@ code {
   cursor: pointer;
 }
 </style>
+
+<style>
+.app-shell.dark-mode .about-container h3 {
+  color: #f6f7f9;
+}
+</style>

@@ -6,8 +6,10 @@ import BaseDashboardCard from '../components/exercise/BaseDashboardCard.vue'
 import SearchBar from '../components/exercise/SearchBar.vue'
 import WeatherCard from '../components/exercise/WeatherCard.vue'
 import { baseballGames, weatherList } from '../data/weatherData'
+import { useConfigStore } from '@/stores/configStore'
 
 const router = useRouter()
+const configStore = useConfigStore()
 
 const searchQuery = ref('')
 const defaultCityInfo = '카드를 클릭하거나 검색해 보세요.'
@@ -39,6 +41,14 @@ const averageTemp = computed(() => {
   return Math.round((total / weatherList.length) * 10) / 10
 })
 
+const displayAverageTemp = computed(() => {
+  const rawTemp = averageTemp.value // 기본 원본 데이터는 섭씨 숫자
+  if (configStore.unit === 'fahrenheit') {
+    return Math.round(((rawTemp * 9) / 5 + 32) * 10) / 10 // 화씨 변환 연산
+  }
+  return rawTemp // 'celsius'일 때는 원본 그대로 반환
+})
+
 const handleDetailJump = (id) => {
   router.push(`/weather/${id}`)
 }
@@ -53,7 +63,7 @@ const handleDetailJump = (id) => {
     <BaseDashboardCard class="weather-card">
       <div class="section-header">
         <h3>지역별 날씨 현황</h3>
-        <span class="avg-temp">평균 {{ averageTemp }}°C</span>
+        <span class="avg-temp">평균 {{ displayAverageTemp }}{{ configStore.unitSymbol }}</span>
       </div>
       <div class="weather-grid">
         <WeatherCard v-for="item in filteredWeatherList" :key="item.id" :city-item="item" :game="gameByCity[item.name]" @select-card="(msg) => (selectedCityInfo = msg)" @click-detail="handleDetailJump(item.id)" />
