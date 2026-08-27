@@ -132,9 +132,9 @@ R -->|실패| T[기본 fallback 데이터 유지]
 
 ### 5-0. Project Scaffolding
 
-1. https://github.com/bottletiger/skala-vue.git을 내 깃허브로 fork하고(https://github.com/iihlolo/skala-vue.git) 로컬에 clone했다.
-2. SKALA-VUE(http://localhost:3000/)에 접속하여 AboutView 확인했다.
-3. Vue Devtools : Overview, Components, Pages Timeline, Assets, Router, Pinia, Graph, Inspect / Search의 기능을 확인했다.
+1. https://github.com/bottletiger/skala-vue.git 을 fork하고(https://github.com/iihlolo/skala-vue.git) 로컬에 clone했습니다.
+2. SKALA-VUE(http://localhost:3000/)에 접속하여 AboutView를 확인했습니다.
+3. Vue Devtools : Overview, Components, Pages Timeline, Assets, Router, Pinia, Graph, Inspect / Search의 기능을 확인했습니다.
 
 ### 5-1. Weather Mockup
 
@@ -341,7 +341,7 @@ R -->|실패| T[기본 fallback 데이터 유지]
 
 5. **날씨 카드 온도 변환**
 - `WeatherCard.vue`에 `displayTemp` computed를 추가했습니다.
-- 원본 섭씨 값을 유지하고, 화씨 선택 시 $F = C \times \frac{9}{5} + 32$ 공식으로 변환해 표시했습니다.
+- 원본 섭씨 값을 유지하고, 화씨 선택 시 `F = C \times \frac{9}{5} + 32` 공식으로 변환해 표시했습니다.
 - 더움·선선함 판단은 표시 단위와 관계없이 원본 섭씨 값을 기준으로 유지했습니다.
 
 6. **홈 화면 평균 기온 변환**
