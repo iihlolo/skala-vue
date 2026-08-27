@@ -16,7 +16,17 @@ const themeStore = useThemeStore()
           <RouterLink to="/about">서비스 소개</RouterLink>
         </nav>
         <UnitToggler />
-        <button class="dark-toggle-btn" @click="themeStore.toggleDarkMode">{{ themeStore.darkModeLabel }}</button>
+        <div class="theme-control">
+          <span>{{ themeStore.darkModeLabel }}</span>
+          <el-switch
+            :model-value="themeStore.isDarkMode"
+            inline-prompt
+            active-text="밤"
+            inactive-text="낮"
+            aria-label="다크 모드 변경"
+            @change="themeStore.toggleDarkMode"
+          />
+        </div>
       </div>
     </header>
     <main class="app-main">
@@ -48,20 +58,23 @@ const themeStore = useThemeStore()
   color: #d1d5db;
 }
 
-.dark-toggle-btn {
-  padding: 6px 10px;
-  background-color: #1c1f26;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
 .header-controls {
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+.theme-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.theme-control span {
+  color: #4b5563;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .app-header {

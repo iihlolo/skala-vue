@@ -22,17 +22,19 @@ const games = computed(() =>
       <h1>오늘의 야구 경기</h1>
     </div>
     <div class="game-grid">
-      <article v-for="game in games" :key="game.city" class="game-card" :class="{ cancelled: game.gameStatus === '우취' }">
+      <el-card v-for="game in games" :key="game.city" class="game-card" :class="{ cancelled: game.gameStatus === '우취' }" shadow="hover">
         <div class="game-card-top">
           <strong>{{ game.city }} {{ game.stadium }}</strong>
-          <span>{{ game.gameStatus }}</span>
+          <el-tag :type="game.gameStatus === '우취' ? 'info' : 'success'" effect="light" round>
+            {{ game.gameStatus }}
+          </el-tag>
         </div>
         <div class="matchup">
           <span>{{ game.awaySP }}</span>
           <strong><img :src="game.awayIcon" alt="" />{{ game.awayTeam }} vs {{ game.homeTeam }}<img :src="game.homeIcon" alt="" /></strong>
           <span>{{ game.homeSP }}</span>
         </div>
-      </article>
+      </el-card>
     </div>
   </section>
 </template>
@@ -43,11 +45,10 @@ const games = computed(() =>
 .page-heading p { margin: 0; color: #3b6ef6; font-size: 13px; font-weight: 700; }
 .page-heading h1 { margin: 6px 0 0; font-size: 26px; }
 .game-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
-.game-card { padding: 18px; background: #ffffff; border: 1px solid #e7e9ee; border-radius: 8px; }
+.game-card { border: 1px solid #e7e9ee; border-radius: 8px; }
+.game-card :deep(.el-card__body) { padding: 18px; }
 .game-card.cancelled { background: #f3f4f6; color: #6b7280; }
 .game-card-top, .matchup { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.game-card-top span { padding: 4px 8px; color: #075f7c; background: #e0f7ff; border-radius: 999px; font-size: 12px; font-weight: 700; }
-.cancelled .game-card-top span { color: #6b7280; background: #d1d5db; }
 .matchup { margin-top: 22px; font-size: 13px; color: #4b5563; }
 .matchup strong { display: flex; align-items: center; gap: 5px; color: #1c1f26; white-space: nowrap; }
 .matchup img { width: 26px; height: 26px; object-fit: contain; }

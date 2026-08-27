@@ -28,6 +28,13 @@ const displayTemp = computed(() => {
   return rawTemp // 'celsius'일 때는 원본 그대로 반환
 })
 
+const temperatureTag = computed(() => {
+  if (props.cityItem.temp >= 25) return { type: 'danger', label: '더움' }
+  if (props.cityItem.temp >= 20) return { type: 'warning', label: '따뜻함' }
+  if (props.cityItem.temp < 10) return { type: 'primary', label: '추움' }
+  return { type: 'success', label: '선선함' }
+})
+
 const weatherIcons = {
   맑음: '☀️',
   비: '🌧️',
@@ -38,9 +45,12 @@ const weatherIcons = {
 </script>
 
 <template>
-  <div class="weather-card"
-  :class="{ 'rainout-card': game?.gameStatus === '우취' }"
-  @click.stop="emit('select-card', `⚾️ ${cityItem.name}${cityItem.stadium}${cityItem.particle} 선택되었습니다.`)">
+  <el-card
+    class="weather-card"
+    :class="{ 'rainout-card': game?.gameStatus === '우취' }"
+    shadow="hover"
+    @click.stop="emit('select-card', `⚾️ ${cityItem.name}${cityItem.stadium}${cityItem.particle} 선택되었습니다.`)"
+  >
     <div class="card-top">
       <div class="name-block">
         <h4>{{ cityItem.name }}</h4>
@@ -52,9 +62,9 @@ const weatherIcons = {
         <!-- <span class="status-label">{{ cityItem.status }}</span> -->
       </div>
       <span class="temp">{{ displayTemp }}{{ configStore.unitSymbol }}</span>
-      <button class="btn-detail" @click.stop="emit('click-detail', cityItem.address, cityItem.status, cityItem.temp)">
+      <el-button class="btn-detail" size="small" round @click.stop="emit('click-detail', cityItem.address, cityItem.status, cityItem.temp)">
         상세보기
-      </button>
+      </el-button>
     </div>
 
     <p v-if="cityItem.humidity != null" class="meta-row">
@@ -62,20 +72,18 @@ const weatherIcons = {
     </p>
 
     <div class="badge-row">
-      <span v-if="cityItem.temp >= 25" class="badge hot">더움</span>
-      <span v-else-if="cityItem.temp >= 20" class="badge warm">따뜻함</span>
-      <span v-else-if="cityItem.temp < 10" class="badge cold">추움</span>
-      <span v-else class="badge cool">선선함</span>
+      <el-tag :type="temperatureTag.type" effect="light" round>{{ temperatureTag.label }}</el-tag>
 
-      <span
+      <el-tag
         v-if="game"
-        class="badge"
-        :class="game.gameStatus === '우취' ? 'rainout' : 'scheduled'"
+        :type="game.gameStatus === '우취' ? 'info' : 'success'"
+        effect="light"
+        round
       >
         {{ game.awayTeam }} vs {{ game.homeTeam }} {{ game.gameStatus }}
-      </span>
+      </el-tag>
     </div>
-  </div>
+  </el-card>
 </template>
 
 <style scoped>
@@ -84,12 +92,14 @@ const weatherIcons = {
   --text-primary: #1c1f26;
   --text-secondary: #6b7280;
 
-  background: #fff;
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px;
+  border-radius: 10px;
   cursor: pointer;
   transition: box-shadow 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.weather-card :deep(.el-card__body) {
+  padding: 10px 12px;
 }
 
 .weather-card:hover {
@@ -106,8 +116,8 @@ const weatherIcons = {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto auto;
   align-items: center;
-  column-gap: 8px;
-  margin-bottom: 8px;
+  column-gap: 6px;
+  margin-bottom: 6px;
 }
 
 .name-block {
@@ -144,71 +154,19 @@ const weatherIcons = {
 .meta-row {
   font-size: 12.5px;
   color: var(--text-secondary);
-  margin: 0 0 12px;
-  line-height: 1.5;
+  margin: 0 0 8px;
+  line-height: 1.35;
 }
 
 .badge-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-}
-
-.badge {
-  display: inline-block;
-  padding: 4px 9px;
-  font-size: 11.5px;
-  font-weight: 500;
-  border-radius: 999px;
-}
-
-.hot {
-  background: #fdecec;
-  color: #c53d33;
-}
-
-.warm {
-  background: #fff4e5;
-  color: #c56f33;
-}
-
-.cool {
-  background: #e0f7ff;
-  color: #075f7c;
-}
-
-.cold {
-  background: #eaf3ff;
-  color: #2563c9;
-}
-
-.scheduled {
-  background: #e6f7f6;
-  color: #0f7d78;
-}
-
-.rainout {
-  background: #d7d7d7;
-  color: #6e6e6e;
+  gap: 4px;
 }
 
 .btn-detail {
   position: static;
   flex-shrink: 0;
-  padding: 5px 10px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease;
-}
-
-.btn-detail:hover {
-  background: #f6f7f9;
-  border-color: #d3d7de;
 }
 
 @container (max-width: 300px) {
