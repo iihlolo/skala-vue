@@ -21,16 +21,19 @@ defineProps({
 
 <style scoped>
 .mockup-box {
-  padding: 18px;
+  padding: 20px;
   margin-bottom: 15px;
   color: #ffffff;
-  background: linear-gradient(135deg, #087f8c, #1098ad);
-  border-radius: 8px;
-  box-shadow: 0 6px 14px rgba(8, 127, 140, 0.2);
+  background: #1e2a4a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(16, 24, 40, 0.12);
 }
 
 .mockup-box h3 {
-  margin-top: 0;
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .game-row {
@@ -38,23 +41,36 @@ defineProps({
   grid-template-columns: 52px 1fr auto;
   gap: 10px;
   align-items: center;
-  padding: 10px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.28);
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.game-row strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.game-row span {
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .game-row b {
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 500;
+  justify-self: end;
 }
 
 .scheduled {
-  color: #087f8c;
-  background: #ffffff;
+  color: #023141;
+  background: rgba(168, 216, 232, 1.0);
 }
 
 .cancelled {
-  color: #8d2f2f;
-  background: #ffd6d6;
+  color: #710f0f;
+  background: rgba(245, 168, 168, 1.0);
 }
 </style>
