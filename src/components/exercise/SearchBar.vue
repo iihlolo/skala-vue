@@ -20,3 +20,14 @@ defineProps({
     </p>
   </div>
 </template>
+
+<style scoped>
+.search-inner h3 {
+  margin-top: 0;
+}
+.search-inner input {
+  padding: 8px;
+  width: 90%;
+  font-size: 14px;
+}
+</style>
