@@ -48,6 +48,14 @@ const getWeatherData = async ({ lat, lon }) => {
   return response.data
 }
 
+const getAirQualityData = async ({ lat, lon }) => {
+  const response = await axios.get(`${OPENWEATHER_BASE_URL}/data/2.5/air_pollution`, {
+    params: getApiParams({ lat, lon }),
+  })
+
+  return response.data.list?.[0]
+}
+
 const toWeatherStatus = (weatherMain) => {
   const statusMap = {
     Clear: '맑음',
@@ -80,6 +88,7 @@ export const fetchWeatherByAddress = async (address) => {
 
   const coordinates = await getCoordinates(address)
   const weather = await getWeatherData(coordinates)
+  const airQuality = await getAirQualityData(coordinates)
   const currentWeather = weather.weather?.[0]
 
   return {
