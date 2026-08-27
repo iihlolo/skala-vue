@@ -18,14 +18,16 @@ const emit = defineEmits(['select-card', 'click-detail'])
 const weatherIcons = {
   맑음: '☀️',
   비: '🌧️',
-  구름: '☁️',
+  흐림: '☁️',
   바람: '💨',
-  눈: '❄️'
+  눈: '❄️',
 }
 </script>
 
 <template>
-  <div class="weather-card" @click="emit('select-card', `${cityItem.name}${cityItem.particle} 선택되었습니다.`)">
+  <div class="weather-card"
+  :class="{ 'rainout-card': game?.gameStatus === '우취' }"
+  @click.stop="emit('select-card', `⚾️ ${cityItem.name}${cityItem.stadium}${cityItem.particle} 선택되었습니다.`)">
     <div class="card-top">
       <div class="name-block">
         <h4>{{ cityItem.name }}</h4>
@@ -37,7 +39,7 @@ const weatherIcons = {
         <!-- <span class="status-label">{{ cityItem.status }}</span> -->
       </div>
       <span class="temp">{{ cityItem.temp }}°C</span>
-      <button class="btn-detail" @click.stop="emit('click-detail', cityItem.name, cityItem.status)">
+      <button class="btn-detail" @click.stop="emit('click-detail', cityItem.address, cityItem.status, cityItem.temp)">
         상세보기
       </button>
     </div>
@@ -47,15 +49,17 @@ const weatherIcons = {
     </p>
 
     <div class="badge-row">
-      <span v-if="cityItem.temp >= 25" class="badge hot">더움 · 25도 이상</span>
-      <span v-else class="badge cool">선선함 · 25도 미만</span>
+      <span v-if="cityItem.temp >= 25" class="badge hot">더움</span>
+      <span v-else-if="cityItem.temp >= 20" class="badge warm">따뜻함</span>
+      <span v-else-if="cityItem.temp < 10" class="badge cold">추움</span>
+      <span v-else class="badge cool">선선함</span>
 
       <span
         v-if="game"
         class="badge"
         :class="game.gameStatus === '우취' ? 'rainout' : 'scheduled'"
       >
-        {{ game.awayTeam }} vs {{ game.homeTeam }} · {{ game.gameStatus }}
+        {{ game.awayTeam }} vs {{ game.homeTeam }} {{ game.gameStatus }}
       </span>
     </div>
   </div>
@@ -71,7 +75,6 @@ const weatherIcons = {
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 16px;
-  container-type: inline-size;
   cursor: pointer;
   transition: box-shadow 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
@@ -82,17 +85,19 @@ const weatherIcons = {
   transform: translateY(-1px);
 }
 
+.rainout-card {
+  background: #efeff0 !important;
+}
+
 .card-top {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto auto;
-  grid-template-areas: 'name status temp detail';
   align-items: center;
   column-gap: 8px;
   margin-bottom: 8px;
 }
 
 .name-block {
-  grid-area: name;
   min-width: 0;
 }
 
@@ -111,22 +116,12 @@ const weatherIcons = {
   color: var(--text-secondary);
 }
 
-.status-block {
-  grid-area: status;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  white-space: nowrap;
-}
-
 .status-icon {
-  font-size: clamp(20px, 14cqw, 28px);
+  font-size: clamp(20px, 2.5vw, 28px);
   line-height: 1;
 }
 
 .temp {
-  grid-area: temp;
-  flex-shrink: 0;
   font-size: 20px;
   font-weight: 600;
   color: var(--text-primary);
@@ -159,7 +154,17 @@ const weatherIcons = {
   color: #c53d33;
 }
 
+.warm {
+  background: #fff4e5;
+  color: #c56f33;
+}
+
 .cool {
+  background: #e0f7ff;
+  color: #075f7c;
+}
+
+.cold {
   background: #eaf3ff;
   color: #2563c9;
 }
@@ -170,12 +175,11 @@ const weatherIcons = {
 }
 
 .rainout {
-  background: #f5e9e9;
-  color: #8d2f2f;
+  background: #d7d7d7;
+  color: #6e6e6e;
 }
 
 .btn-detail {
-  grid-area: detail;
   position: static;
   flex-shrink: 0;
   padding: 5px 10px;
@@ -194,4 +198,34 @@ const weatherIcons = {
   border-color: #d3d7de;
 }
 
+@container (max-width: 300px) {
+  .card-top {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .name-block {
+    flex: 1 1 0;
+    order: 1;
+  }
+
+  .status-block {
+    flex: 0 0 100%;
+    order: 4;
+    justify-self: start;
+  }
+
+  .temp {
+    order: 2;
+  }
+
+  .btn-detail {
+    order: 3;
+  }
+
+  .status-label {
+    font-size: 12px;
+  }
+}
 </style>

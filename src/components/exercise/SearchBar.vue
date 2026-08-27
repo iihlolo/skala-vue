@@ -22,12 +22,33 @@ defineProps({
 </template>
 
 <style scoped>
-.search-inner h3 {
-  margin-top: 0;
+.search-inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 45%);
+  grid-template-rows: auto auto;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
 }
+
+.search-inner h3 {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+}
+
+.search-inner p {
+  grid-column: 1;
+  grid-row: 2;
+  margin: 0;
+  text-align: center;
+}
+
 .search-inner input {
+  grid-column: 2;
+  grid-row: 1;
   padding: 8px;
-  width: 90%;
+  width: 100%;
   font-size: 14px;
 }
 </style>
