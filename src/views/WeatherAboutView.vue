@@ -9,30 +9,39 @@ const handleGoHome = () => {
 </script>
 
 <template>
-  <div>
+  <section class="about-container">
     <h3>ℹ️ 서비스 소개</h3>
     <hr />
 
     <div class="description-box">
-      <p>본 앱은 <strong>Vue 3</strong> 및 <strong>Vue Router 4</strong> 기반 제작된 실습용 기상 관측 대시보드 시스템입니다.</p>
+      <p>본 앱은 <strong>Vue 3</strong>와 <strong>Vue Router</strong>로 만든 실습용 야구장 기상 관측 대시보드입니다.</p>
       <ul>
-        <li><code>components/exercise/</code> 폴더 내부의 독립 부품 연동</li>
-        <li>클라이언트 사이드 라우팅을 통한 새로고침 없는 화면 전환</li>
-        <li>URL 쿼리 스트링 매핑을 활용한 실시간 검색 상태 동기화</li>
+        <li>지역, 주소, 야구장 이름으로 관측 지역을 검색</li>
+        <li>도시별 상세 페이지에서 기온, 날씨, 습도, 풍속, 미세먼지 확인</li>
+        <li>당일 야구 경기 일정과 날씨에 따른 경기 상태 확인</li>
       </ul>
     </div>
 
     <button @click="handleGoHome" class="home-btn">대시보드 홈으로 이동</button>
-  </div>
+  </section>
 </template>
 
 <style scoped>
+.about-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
 .description-box {
+  width: 100%;
   background-color: #f8f9fa;
   padding: 12px;
   border-radius: 6px;
   line-height: 1.5;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
 ul {
